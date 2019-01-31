@@ -4,9 +4,16 @@ const port = 7070;
 const host = "localhost";
 // const increment = Math.floor(Math.sin(Math.PI / 50));
 
+function getDate() {
+  const date = new Date();
+  // date.set
+  date.setDate(date.getDate() - 4);
+  return date.getTime();
+}
+
 const obj = {
   dp_bim_prefix: "HLC_019",
-  dp_time: Date.now(),
+  dp_time: getDate(),
   data: [
     {
       dp_bim_postfix: "nciSetpoints_occupied_cool",
@@ -117,27 +124,28 @@ let id = 0;
 setInterval(() => {
   send_data();
 }, 1000);
+
 function update_data(obj) {
-  id += 1;
-  obj.dp_time = Date.now();
+  obj.dp_time = getDate();
   for (let index = 0; index < obj.data.length; index++) {
     const element = obj.data[index];
-    const increment = Math.floor(Math.sin((index * 2 * Math.PI / 3) + (id * (Math.PI / 30))) * 100);
+    const increment = Math.floor(Math.sin((index * 2 * Math.PI / obj.data.length) + (id * (Math.PI / 30))) * 100);
     element.dp_value_f = increment;
   }
+  id += 1;
 }
+
 function send_data() {
   client.connect(
     port,
     host,
     function() {
-      console.log("Connected");
+      update_data(obj);
       const str = JSON.stringify(obj);
       console.log(str);
       client.write(str.slice(0, str.length / 2));
       setTimeout(() => {
         client.end(str.slice(str.length / 2));
-        update_data(obj);
       }, 200);
     }
   );

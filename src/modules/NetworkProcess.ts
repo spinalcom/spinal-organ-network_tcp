@@ -65,9 +65,9 @@ export class NetworkProcess {
    * @param {InputDataDevice} obj
    * @memberof NetworkProcess
    */
-  updateData(obj: InputDataDevice) {
+  updateData(obj: InputDataDevice, date?: any) {
     console.log('Update data device ! => ', obj.name);
-    this.nwService.updateData.call(this.nwService, obj);
+    this.nwService.updateData.call(this.nwService, obj, date);
   }
 
 }

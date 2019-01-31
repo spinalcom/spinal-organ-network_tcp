@@ -36,7 +36,7 @@ import { ConfigOrgan } from '../../Utils/ConfigOrgan';
 import * as net from 'net';
 import { InputTCPDataDevice } from './InputDataModel/InputTCPData';
 
-type onDataFunctionType = (obj: InputDataDevice) => void;
+type onDataFunctionType = (obj: InputDataDevice, date?: any) => void;
 
 /**
  * Simulation Class to generate data from an extrenal source
@@ -127,7 +127,7 @@ class InputData {
       // update device
       device.update(parsed);
       if (this.onData !== null) {
-        this.onData(device);
+        this.onData(device, parsed.dp_time);
       }
       return true;
       // update endpoints of the device
