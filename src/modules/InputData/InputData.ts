@@ -147,9 +147,11 @@ class InputData {
       if (this.onData !== null) {
         this.onData(device, parsed.dp_time);
       }
+      console.log('JSON valid.');
       return true;
       // update endpoints of the device
     } catch (error) {
+      console.log('JSON not valid.');
       // console.error(error);
       return false;
     }
@@ -162,6 +164,13 @@ class InputData {
   onClose(socket: net.Socket) {
     if (this.config.DEBUG) {
       console.log(`CLOSED: ${socket.remoteAddress}:${socket.remotePort}`);
+      if (this.clientsMessages[socket.remoteAddress].length !== 0) {
+        try {
+          JSON.parse(this.clientsMessages[socket.remoteAddress]);
+        } catch (e) {
+          console.error('connection closed with error:', e);
+        }
+      }
     }
     this.clientsMessages[socket.remoteAddress] = '';
   }
