@@ -88,7 +88,8 @@ class InputData {
    */
   onConnect(socket: net.Socket) {
     if (this.config.DEBUG) {
-      console.log(`CONNECTED: ${socket.remoteAddress}:${socket.remotePort}` + 'at date : ' + new Date());
+      console.log(`CONNECTED: ${socket.remoteAddress}:${
+        socket.remotePort} at date : ${new Date().toDateString()}`);
     }
     this.clientsMessages[socket.remoteAddress] = '';
   }
