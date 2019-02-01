@@ -115,9 +115,26 @@ class InputData {
     return null;
   }
 
+  trimError(json: string): string {
+    let res = json;
+    let counterOpen = 1;
+    for (let index = 1; index < json.length; index += 1) {
+      const char = json[index];
+
+      if (char === '{') counterOpen += 1;
+      if (char === '}') counterOpen -= 1;
+      if (counterOpen === 0) {
+        res = json.slice(0, index + 1);
+        break;
+      }
+    }
+    return res;
+  }
+
   private parseIncomingTCPData(data: string) {
     try {
-      const parsed:InputTCPDataDevice = JSON.parse(data);
+      const json = this.trimError(data);
+      const parsed:InputTCPDataDevice = JSON.parse(json);
       let device = this.searchExistingDevice(parsed);
       if (device === null) {
         // create a model if it doesn't exist
